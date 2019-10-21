@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QueueView", "QueueView\QueueView.csproj", "{FCA52939-9013-467A-A9B4-2418C55D500B}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Extensions", "Extensions\Extensions.shproj", "{D86BE9F8-762C-480F-8E03-EF1D49E763D4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QueueView.Configuration", "QueueView.Configuration\QueueView.Configuration.shproj", "{456A3CA3-3C2C-48F0-81D7-402094A4D522}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "QueueView.Models", "QueueView.Models\QueueView.Models.shproj", "{6EFB0082-88DD-414A-9D2D-23B038BE3CE8}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		QueueView.Configuration\QueueView.Configuration.projitems*{456a3ca3-3c2c-48f0-81d7-402094a4d522}*SharedItemsImports = 13
+		QueueView.Models\QueueView.Models.projitems*{6efb0082-88dd-414a-9d2d-23b038be3ce8}*SharedItemsImports = 13
+		Extensions\Extensions.projitems*{d86be9f8-762c-480f-8e03-ef1d49e763d4}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCA52939-9013-467A-A9B4-2418C55D500B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCA52939-9013-467A-A9B4-2418C55D500B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCA52939-9013-467A-A9B4-2418C55D500B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCA52939-9013-467A-A9B4-2418C55D500B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F8E35E15-5FFF-434E-BC30-8440CC2BC7F8}
+	EndGlobalSection
+EndGlobal
