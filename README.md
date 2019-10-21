@@ -32,9 +32,15 @@
 - [x] List the messages in a table format `qv messages [...] -p`
 - [x] List only the specified fields for messages `qv messages [...] -f field1,field2`
 
-## Dead Letters
-- [ ] Resubmit a message from the specified deadletter queue to the main queue `qv deadletters -r <sequence-number>`
-- [ ] Resubmit all messages from the specified deadletter queue to the main queue `qv deadletters -R`
+## Send
+- [x] Send messages to a queue `qv send [...] -C <destination-connection> -Q <destination-queue>`
+- [x] Send messages to a topic `qv send [...] -C <destination-connection> -T <destination-topic>`
+- [x] Send messages from a file (one message per line) `qv send [...] -f <file-name>`
+- [x] Send messages from standard input (one message per line) `echo 'message' | qv send [...] -i`
+- [x] Send messages read from a Service Bus queue `qv send -c <source-connection> -q <source-queue> [...]`
+- [x] Send messages read from a Service Bus subscription `qv send -c <source-connection> -t <source-topic> -s <source-subscription> [...]`
+- [x] Consume messages as you read them from Service Bus `qv send [...] -D`
+- [x] Send messages read from a dead letter queue in Service Bus `qv send [...] -d`
 
 ## Status
 - [x] Show metadata about the specified queue in the default connection `qv status -q <queue-name>`
