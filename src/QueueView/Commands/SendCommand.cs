@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
+using QueueView.Format;
 
 namespace QueueView.Commands
 {
@@ -71,19 +72,66 @@ namespace QueueView.Commands
 
                 IMessageReceiver receiver = new MessageReceiver(sourceConnectionString, path);
 
-                for (
-                    Message message = await receiver.ReceiveAsync();
-                    message != null;
-                    message = await receiver.ReceiveAsync()
-                )
+                if (Options.ConsumeMessages)
                 {
-                    Console.WriteLine($"Received message: {Encoding.UTF8.GetString(message.Body)}");
-                    await _sender.SendAsync(message.Clone());
-                    Console.WriteLine("Resubmitted message.");
-                    await receiver.CompleteAsync(message.SystemProperties.LockToken);
-                    Console.WriteLine("Completed message.");
+                    await ConsumeAndSend(receiver);
+                }
+                else
+                {
+                    await PeekAndSend(receiver);
                 }
             }
+        }
+
+        /// <summary>
+        /// Peeks messages from a path in Azure Service Bus using the provided <see cref="IMessageReceiver"/>.
+        /// Sends the messages that were peeked to a target path using the <see cref="_sender"/>.
+        /// </summary>
+        /// <param name="receiver">A receiver opened to a path in Azure Service Bus with a connection string.</param>
+        /// <returns>nothing</returns>
+        private async Task PeekAndSend(IMessageReceiver receiver)
+        {
+            for (
+                Message message = await receiver.PeekAsync();
+                message != null;
+                message = await receiver.PeekAsync()
+            )
+            {
+                await Send(receiver, message);
+            }
+        }
+
+        /// <summary>
+        /// Dequeues messages from a path in Azure Service Bus using the provided <see cref="IMessageReceiver"/>.
+        /// Sends the messages that were dequeued to a target path using the <see cref="_sender"/>.
+        /// </summary>
+        /// <param name="receiver">A receiver opened to a path in Azure Service Bus with a connection string.</param>
+        /// <returns>nothing</returns>
+        private async Task ConsumeAndSend(IMessageReceiver receiver)
+        {
+            for (
+                Message message = await receiver.ReceiveAsync();
+                message != null;
+                message = await receiver.ReceiveAsync()
+            )
+            {
+                await Send(receiver, message);
+            }
+        }
+
+        /// <summary>
+        /// Sends a message and completes the peeking or dequeueing of that message from the provided <see cref="IMessageReceiver"/>.
+        /// </summary>
+        /// <param name="receiver">The <see cref="IMessageReceiver"/> that the message was retrieved from.</param>
+        /// <param name="message">The message to be sent and completed.</param>
+        /// <returns>nothing</returns>
+        private async Task Send(IMessageReceiver receiver, Message message)
+        {
+            Console.WriteLine($"Received message: {MessageFormat.GetBody(message)}");
+            await _sender.SendAsync(message.Clone());
+            Console.Write("Resubmitted message... ");
+            await receiver.CompleteAsync(message.SystemProperties.LockToken);
+            Console.WriteLine("Completed message.");
         }
 
         /// <summary>

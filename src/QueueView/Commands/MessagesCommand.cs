@@ -129,6 +129,7 @@ namespace QueueView.Commands
                 if (i == count) break;
                 i++;
                 Console.WriteLine(formatter.Format(message));
+                await receiver.CompleteAsync(message.SystemProperties.LockToken);
             }
         }
     }
