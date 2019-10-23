@@ -1,5 +1,57 @@
 # QueueView
 
+## Overview
+QueueView is a linux-style command line app for interacting with Azure Service Bus written in .NET Core.
+
+## Getting Started
+QueueView uses a connection string to interact with Azure Service Bus. It does so by maintaining a list of 'connections' in a config file in the user's home folder.
+
+### Add a connection
+To save a new connection, provide a friendly name and the connection string using the `connections` verb:
+```
+sean@computer $ qv connections -n servicebus-prod -c "Endpoint=sb://NAMESPACE.servicebus.windows.net/;SharedAccessKeyName=KEYNAME;SharedAccessKey=KEY"
+```
+
+### View saved connections
+To see the newly added connection, use the `connections` verb without any arguments.
+```
+sean@computer $ qv connections
+servicebus-prod Endpoint=sb://NAMESPACE.servicebus.windows.net/;SharedAccessKeyName=KEYNAME;SharedAccessKey=KEY
+sean@computer $
+```
+
+### Read messages from a queue
+Now that there is a saved connection, it is possible to read messages. QueueView handles Azure Service Bus queues and subscriptions. Queues use a producer-consumer model, while subscriptions use a publisher-subscriber model.
+
+To read from a queue, use the 'messages' verb. Reading from a queue requires two bits of information: the name of a saved connection and the name of the queue.
+```
+sean@computer $ qv messages --connection servicebus-prod --queue status-updates
+MessageId, SeqNum, Body, User Properties
+au6d34, 123, {"title": "I got a dog!", "content": "His name is Buddy, and he's the cutest. :)"}, {}
+sean@computer $
+```
+
+By default, the messages print in a pseudo-CSV format. The messages are printed one message per line, and additional metadata is provided such as the sequence number of the message. You can specify which fields you would like to see using the `--fields` argument.
+```
+sean@computer $ qv messages --connection servicebus-prod --queue status-updates --fields Body
+{"title": "I got a dog!", "content": "His name is Toby, and he's the cutest. :)"}
+sean@computer $
+```
+
+### Chaining with other tools
+This lends itself to easier parsing and formatting via chaining with other command line utilities such as `grep` or `jq`.
+```
+sean@computer $ qv messages --connection servicebus-prod --queue status-updates --fields Body | jq '.'
+{
+  "title": "I got a dog!",
+  "content": "His name is Buddy, and he's the cutest. :)"
+}
+sean@computer $
+```
+
+## Permissions
+QueueView can only do as much as the permissions of the connection string allow. If the connection string is an administrator-level connection string, you will be able to see metadata about queues and write to queues or topics. If the connection string only provides read-only permissions, then it will only be possible to peek or dequeue messages.
+
 ## Connections
 - [x] Get or set the default connection. Use `.` to get. `qv connections -d <connection-name>`
 - [x] List the connections `qv connections`
