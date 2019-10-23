@@ -34,7 +34,7 @@ sean@computer $
 By default, the messages print in a pseudo-CSV format. The messages are printed one message per line, and additional metadata is provided such as the sequence number of the message. You can specify which fields you would like to see using the `--fields` argument.
 ```
 sean@computer $ qv messages --connection servicebus-prod --queue status-updates --fields Body
-{"title": "I got a dog!", "content": "His name is Toby, and he's the cutest. :)"}
+{"title": "I got a dog!", "content": "His name is Buddy, and he's the cutest. :)"}
 sean@computer $
 ```
 
