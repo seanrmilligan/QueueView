@@ -97,7 +97,9 @@ namespace QueueView.Commands
                 message = await receiver.PeekAsync()
             )
             {
-                await Send(receiver, message);
+                Console.WriteLine($"Received message: {MessageFormat.GetBody(message)}");
+                await _sender.SendAsync(message.Clone());
+                Console.WriteLine("Resubmitted message.");
             }
         }
 
@@ -115,23 +117,12 @@ namespace QueueView.Commands
                 message = await receiver.ReceiveAsync()
             )
             {
-                await Send(receiver, message);
+                Console.WriteLine($"Received message: {MessageFormat.GetBody(message)}");
+                await _sender.SendAsync(message.Clone());
+                Console.WriteLine("Resubmitted message. ");
+                await receiver.CompleteAsync(message.SystemProperties.LockToken);
+                Console.WriteLine("Completed message.");
             }
-        }
-
-        /// <summary>
-        /// Sends a message and completes the peeking or dequeueing of that message from the provided <see cref="IMessageReceiver"/>.
-        /// </summary>
-        /// <param name="receiver">The <see cref="IMessageReceiver"/> that the message was retrieved from.</param>
-        /// <param name="message">The message to be sent and completed.</param>
-        /// <returns>nothing</returns>
-        private async Task Send(IMessageReceiver receiver, Message message)
-        {
-            Console.WriteLine($"Received message: {MessageFormat.GetBody(message)}");
-            await _sender.SendAsync(message.Clone());
-            Console.Write("Resubmitted message... ");
-            await receiver.CompleteAsync(message.SystemProperties.LockToken);
-            Console.WriteLine("Completed message.");
         }
 
         /// <summary>
