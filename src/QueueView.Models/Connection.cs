@@ -16,7 +16,7 @@ namespace QueueView.Models
         /// <summary>
         /// An Azure Service Bus connection string.
         /// </summary>
-        /// <example>Endpoint=sb://NAMESPACE.servicebus.windows.net/;SharedAccessKeyName=KEYNAME;SharedAccessKey=KEY"</example>
+        /// <example>Endpoint=sb://NAMESPACE.servicebus.windows.net/;SharedAccessKeyName=KEYNAME;SharedAccessKey=KEY</example>
         public readonly string ConnectionString;
         
         /// <summary>
