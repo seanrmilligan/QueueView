@@ -8,13 +8,13 @@ QueueView uses a connection string to interact with Azure Service Bus. It does s
 
 ### Add a connection
 To save a new connection, provide a friendly name and the connection string using the `connections` verb:
-```
+```console
 sean@computer $ qv connections -n servicebus-prod -c "Endpoint=sb://NAMESPACE.servicebus.windows.net/;SharedAccessKeyName=KEYNAME;SharedAccessKey=KEY"
 ```
 
 ### View saved connections
 To see the newly added connection, use the `connections` verb without any arguments.
-```
+```console
 sean@computer $ qv connections
 servicebus-prod Endpoint=sb://NAMESPACE.servicebus.windows.net/;SharedAccessKeyName=KEYNAME;SharedAccessKey=KEY
 sean@computer $
@@ -24,7 +24,7 @@ sean@computer $
 Now that there is a saved connection, it is possible to read messages. QueueView handles Azure Service Bus queues and subscriptions. Queues use a producer-consumer model, while subscriptions use a publisher-subscriber model.
 
 To read from a queue, use the 'messages' verb. Reading from a queue requires two bits of information: the name of a saved connection and the name of the queue.
-```
+```console
 sean@computer $ qv messages --connection servicebus-prod --queue status-updates
 MessageId, SeqNum, Body, User Properties
 au6d34, 123, {"title": "I got a dog!", "content": "His name is Buddy, and he's the cutest. :)"}, {}
@@ -32,7 +32,7 @@ sean@computer $
 ```
 
 By default, the messages print in a pseudo-CSV format. The messages are printed one message per line, and additional metadata is provided such as the sequence number of the message. You can specify which fields you would like to see using the `--fields` argument.
-```
+```console
 sean@computer $ qv messages --connection servicebus-prod --queue status-updates --fields Body
 {"title": "I got a dog!", "content": "His name is Buddy, and he's the cutest. :)"}
 sean@computer $
@@ -40,7 +40,7 @@ sean@computer $
 
 ### Chaining with other tools
 This lends itself to easier parsing and formatting via chaining with other command line utilities such as `grep` or `jq`.
-```
+```console
 sean@computer $ qv messages --connection servicebus-prod --queue status-updates --fields Body | jq '.'
 {
   "title": "I got a dog!",
