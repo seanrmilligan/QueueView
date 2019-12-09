@@ -60,18 +60,15 @@ QueueView can only do as much as the permissions of the connection string allow.
 - [x] Delete a connection `qv connections -D <connection-name>`
 
 ## Queues
-- [x] Get or set the default queue. Use `.` to get. `qv queues -d <queue-name>`
 - [x] List the queues in the default connection `qv queues`
 - [x] List the queues in the specified connection `qv queues -c <connection-name>`
 
 ## Topics
-- [x] Get or set the default topic. Use `.` to get. `qv topics -d <topic-name>`
 - [x] List the topics in the default connection `qv topics`
 - [x] List the topics in the specified connection `qv topics -c <connection-name>`
 
 ## Subscriptions
-- [x] Get or set the default subscription. Use `.` to get. `qv subscriptions -d <subscription-name>`
-- [x] List the subscriptions in the default topic using the default connection `qv subscriptions`
+- [x] List the subscriptions in all topics in the default connection `qv subscriptions`
 - [x] List the subscriptions in the specified topic using the default connection `qv subscriptions -t <topic-name>`
 - [x] List the subscriptions in the specified topic using the specified connection `qv subscriptions -c <connection-name> -t <topic-name>`
 
@@ -97,6 +94,4 @@ QueueView can only do as much as the permissions of the connection string allow.
 ## Status
 - [x] Show metadata about the specified queue in the default connection `qv status -q <queue-name>`
 - [x] Show metadata about the specified queue in the specified connection `qv status -c <connection-name> -q <queue-name>`
-- [x] Show metadata about the specified subscription in the default topic and default connection `qv status -s <subscription-name>`
-- [x] Show metadata about the specified subscription in the default topic and specified connection `qv status -c <connection-name> -s <subscription-name>`
 - [x] Show metadata about the specified subscription in the specified topic and specified connection `qv status -c <connection-name> -t <topic-name> -s <subscription-name>`
