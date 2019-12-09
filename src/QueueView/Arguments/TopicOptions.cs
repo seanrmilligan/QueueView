@@ -7,8 +7,5 @@ namespace QueueView.Arguments
     {
         [Option('c', "connection", HelpText = "The name of the connection to use if not the default.", SetName = "All")]
         public string ConnectionName { get; set; }
-
-        [Option('d', "default", HelpText = "Get or set the default topic. Use . to get.", SetName = "Default")]
-        public string DefaultTopicName { get; set; }
     }
 }

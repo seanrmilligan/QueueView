@@ -16,22 +16,7 @@ namespace QueueView.Commands
         /// <inheritdoc cref="Command{T}.Execute" />
         public override async Task Execute()
         {
-            if (!string.IsNullOrEmpty(Options.DefaultSubscriptionName))
-            {
-                // A period is specified as the way of differentiating 'get' from 'set'
-                if (Options.DefaultSubscriptionName.Equals("."))
-                {
-                    GetDefault();
-                }
-                else
-                {
-                    SetDefault(Options.DefaultSubscriptionName);
-                }
-            }
-            else
-            {
-                await GetAll(Options.ConnectionName, Options.TopicName);
-            }
+            await GetAll(Options.ConnectionName, Options.TopicName);
         }
 
         /// <summary>
@@ -54,29 +39,6 @@ namespace QueueView.Commands
             }
 
             await manager.CloseAsync();
-        }
-
-        /// <summary>
-        /// Display the default subscription.
-        /// </summary>
-        private void GetDefault()
-        {
-            Models.Configuration config = Store.ReadConfiguration();
-
-            Console.WriteLine(config.DefaultSubscriptionName);
-        }
-
-        /// <summary>
-        /// Set the default subscription.
-        /// </summary>
-        /// <param name="subscriptionName">The name of the subscription.</param>
-        private void SetDefault(string subscriptionName)
-        {
-            Models.Configuration config = Store.ReadConfiguration();
-
-            config = config.With(defaultSubscriptionName: subscriptionName);
-
-            Store.WriteConfiguration(config);
         }
     }
 }

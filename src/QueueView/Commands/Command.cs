@@ -67,31 +67,26 @@ namespace QueueView.Commands
 
         /// <summary>
         /// Construct the Azure Service Bus path for a queue.
-        /// Selects the default queue name if the provided <see cref="queueName"/> is null.
-        /// Throws an <see cref="Exception"/> if the internally selected queue name is null or empty.
+        /// Throws an <see cref="Exception"/> if the queue name is null or empty.
         /// </summary>
         /// <param name="queueName">The name of the queue.</param>
         /// <param name="deadletter">Indicates whether to construct a path for the main queue or the dead letter sub-queue.</param>
         /// <returns>A queue path understood by Azure Service Bus.</returns>
         public string QueuePath(string queueName, bool deadletter = false)
         {
-            Models.Configuration config = Store.ReadConfiguration();
-            string queue = queueName ?? config.DefaultQueueName;
-            
-            if (string.IsNullOrEmpty(queue))
+            if (string.IsNullOrEmpty(queueName))
             {
                 throw new Exception("Queue name cannot be null or empty.");
             }
 
-            string queuePath = queue + (deadletter ? "/$DeadLetterQueue" : string.Empty);
+            string queuePath = queueName + (deadletter ? "/$DeadLetterQueue" : string.Empty);
 
             return queuePath;
         }
 
         /// <summary>
         /// Construct the Azure Service Bus path for a subscription.
-        /// Selects the default subscription name if the provided <see cref="subscriptionName"/> is null.
-        /// Throws an <see cref="Exception"/> if the internally selected subscription name is null or empty.
+        /// Throws an <see cref="Exception"/> if the topic name or subscription name is null or empty.
         /// </summary>
         /// <param name="topicName">The name of the topic where the subscription can be found.</param>
         /// <param name="subscriptionName">The name of the subscription.</param>
@@ -99,43 +94,35 @@ namespace QueueView.Commands
         /// <returns>A subscription path understood by Azure Service Bus.</returns>
         public string SubscriptionPath(string topicName, string subscriptionName, bool deadletter = false)
         {
-            Models.Configuration config = Store.ReadConfiguration();
-            string topic = topicName ?? config.DefaultTopicName;
-            string subscription = subscriptionName ?? config.DefaultSubscriptionName;
-
-            if (string.IsNullOrEmpty(topic))
+            if (string.IsNullOrEmpty(topicName))
             {
                 throw new Exception("Topic name cannot be null or empty.");
             }
 
-            if (string.IsNullOrEmpty(subscription))
+            if (string.IsNullOrEmpty(subscriptionName))
             {
                 throw new Exception("Subscription name cannot be null or empty.");
             }
 
-            string subscriptionPath = $"{topic}/Subscriptions/{subscription}" + (deadletter ? "/$DeadLetterQueue" : string.Empty);
+            string subscriptionPath = $"{topicName}/Subscriptions/{subscriptionName}" + (deadletter ? "/$DeadLetterQueue" : string.Empty);
 
             return subscriptionPath;
         }
 
         /// <summary>
         /// Construct the Azure Service Bus path for a topic.
-        /// Selects the default topic name if the provided <see cref="topicName"/> is null.
-        /// Throws an <see cref="Exception"/> if the internally selected topic name is null or empty.
+        /// Throws an <see cref="Exception"/> if the topic name is null or empty.
         /// </summary>
         /// <param name="topicName">The name of the topic.</param>
         /// <returns>A topic path understood by Azure Service Bus.</returns>
         public string TopicPath(string topicName)
         {
-            Models.Configuration config = Store.ReadConfiguration();
-            string topic = topicName ?? config.DefaultTopicName;
-
-            if (string.IsNullOrEmpty(topic))
+            if (string.IsNullOrEmpty(topicName))
             {
                 throw new Exception("Topic name cannot be null or empty.");
             }
 
-            return topic;
+            return topicName;
         }
     }
 }

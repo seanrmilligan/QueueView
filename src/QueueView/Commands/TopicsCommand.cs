@@ -15,22 +15,7 @@ namespace QueueView.Commands
         /// <inheritdoc cref="Command{T}.Execute" />
         public override async Task Execute()
         {
-            if (!string.IsNullOrEmpty(Options.DefaultTopicName))
-            {
-                // A period is specified as the way of differentiating 'get' from 'set'
-                if (Options.DefaultTopicName.Equals("."))
-                {
-                    GetDefault();
-                }
-                else
-                {
-                    SetDefault(Options.DefaultTopicName);
-                }
-            }
-            else
-            {
-                await GetAll(Options.ConnectionName);
-            }
+            await GetAll(Options.ConnectionName);
         }
 
         /// <summary>
@@ -50,29 +35,6 @@ namespace QueueView.Commands
             }
 
             await client.CloseAsync();
-        }
-
-        /// <summary>
-        /// Display the default topic.
-        /// </summary>
-        private void GetDefault()
-        {
-            Models.Configuration config = Store.ReadConfiguration();
-
-            Console.WriteLine(config.DefaultTopicName);
-        }
-
-        /// <summary>
-        /// Set the default topic.
-        /// </summary>
-        /// <param name="topicName">The name of the topic.</param>
-        private void SetDefault(string topicName)
-        {
-            Models.Configuration config = Store.ReadConfiguration();
-
-            config = config.With(defaultTopicName: topicName);
-
-            Store.WriteConfiguration(config);
         }
     }
 }

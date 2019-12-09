@@ -26,24 +26,6 @@ namespace QueueView.Models
         /// <returns>An Azure Service Bus connection string if there is a match, null otherwise.</returns>
         [JsonIgnore]
         public string DefaultConnectionString => ConnectionString(DefaultConnectionName);
-
-        /// <summary>
-        /// The name of a queue in Azure Service Bus. Represents a portion of the path.
-        /// The default queue name is used when a queue name is not explicitly provided.
-        /// </summary>
-        public readonly string DefaultQueueName;
-
-        /// <summary>
-        /// The name of a subscription in Azure Service Bus. Represents a portion of the path.
-        /// The default subscription name is used when a subscription name is not explicitly provided.
-        /// </summary>
-        public readonly string DefaultSubscriptionName;
-
-        /// <summary>
-        /// The name of a topic in Azure Service Bus. Represents a portion of the path.
-        /// The default topic name is used when a topic name is not explicitly provided.
-        /// </summary>
-        public readonly string DefaultTopicName;
         
         /// <summary>
         /// Constructs an empty configuration.
@@ -52,9 +34,6 @@ namespace QueueView.Models
         {
             Connections = new List<Connection>();
             DefaultConnectionName = string.Empty;
-            DefaultQueueName = string.Empty;
-            DefaultSubscriptionName = string.Empty;
-            DefaultTopicName = string.Empty;
         }
 
         /// <summary>
@@ -63,23 +42,14 @@ namespace QueueView.Models
         /// </summary>
         /// <param name="connections">A list of connection strings with user-given friendly names.</param>
         /// <param name="defaultConnectionName">The user-given friendly name of the default connection.</param>
-        /// <param name="defaultQueueName">The name of a queue in Azure Service Bus.</param>
-        /// <param name="defaultSubscriptionName">The name of a subscription in Azure Service Bus.</param>
-        /// <param name="defaultTopicName">The name of a topic in Azure Service Bus.</param>
         [JsonConstructor]
         public Configuration(
             List<Connection> connections,
-            string defaultConnectionName,
-            string defaultQueueName,
-            string defaultSubscriptionName,
-            string defaultTopicName
+            string defaultConnectionName
             )
         {
             Connections = connections ?? throw new NullReferenceException(nameof(connections));
             DefaultConnectionName = defaultConnectionName ?? throw new NullReferenceException(nameof(defaultConnectionName));
-            DefaultQueueName = defaultQueueName ?? throw new NullReferenceException(nameof(defaultQueueName));
-            DefaultSubscriptionName = defaultSubscriptionName ?? throw new NullReferenceException(nameof(defaultSubscriptionName));
-            DefaultTopicName = defaultTopicName ?? throw new NullReferenceException(nameof(defaultTopicName));
         }
 
         /// <summary>
@@ -103,23 +73,15 @@ namespace QueueView.Models
         /// </summary>
         /// <param name="connections">A list of connection strings with user-given friendly names.</param>
         /// <param name="defaultConnectionName">The new <see cref="DefaultConnectionName"/>.</param>
-        /// <param name="defaultQueueName">The new <see cref="DefaultQueueName"/>.</param>
-        /// <param name="defaultSubscriptionName">The new <see cref="DefaultSubscriptionName"/>.</param>
-        /// <param name="defaultTopicName">The new <see cref="DefaultTopicName"/>.</param>
         /// <returns>A new <see cref="Configuration"/> with the specified changes.</returns>
         public Configuration With(
             List<Connection> connections = null,
-            string defaultConnectionName = null,
-            string defaultQueueName = null,
-            string defaultSubscriptionName = null,
-            string defaultTopicName = null)
+            string defaultConnectionName = null
+            )
         {
             return new Configuration(
                 connections ?? Connections,
-                defaultConnectionName ?? DefaultConnectionName,
-                defaultQueueName ?? DefaultQueueName,
-                defaultSubscriptionName ?? DefaultSubscriptionName,
-                defaultTopicName ?? DefaultTopicName
+                defaultConnectionName ?? DefaultConnectionName
                 );
         }
     }

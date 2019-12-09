@@ -16,22 +16,7 @@ namespace QueueView.Commands
         /// <inheritdoc cref="Command{T}.Execute" />
         public override async Task Execute()
         {
-            if (!string.IsNullOrEmpty(Options.DefaultQueueName))
-            {
-                // A period is specified as the way of differentiating 'get' from 'set'
-                if (Options.DefaultQueueName.Equals("."))
-                {
-                    GetDefault();
-                }
-                else
-                {
-                    SetDefault(Options.DefaultQueueName);
-                }
-            }
-            else
-            {
-                await GetAll(Options.ConnectionName);
-            }
+            await GetAll(Options.ConnectionName);
         }
 
         /// <summary>
@@ -53,29 +38,6 @@ namespace QueueView.Commands
             }
 
             await manager.CloseAsync();
-        }
-
-        /// <summary>
-        /// Display the default queue.
-        /// </summary>
-        private void GetDefault()
-        {
-            Models.Configuration config = Store.ReadConfiguration();
-
-            Console.WriteLine(config.DefaultQueueName);
-        }
-
-        /// <summary>
-        /// Set the default queue.
-        /// </summary>
-        /// <param name="queueName">The system name of the queue.</param>
-        private void SetDefault(string queueName)
-        {
-            Models.Configuration config = Store.ReadConfiguration();
-
-            config = config.With(defaultQueueName: queueName);
-
-            Store.WriteConfiguration(config);
         }
     }
 }
