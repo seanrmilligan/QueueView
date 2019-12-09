@@ -16,7 +16,42 @@ namespace QueueView.Commands
         /// <inheritdoc cref="Command{T}.Execute" />
         public override async Task Execute()
         {
-            await GetAll(Options.ConnectionName, Options.TopicName);
+            if (string.IsNullOrEmpty(Options.TopicName))
+            {
+                await GetAll(Options.ConnectionName);
+            } else
+            {
+                await GetAll(Options.ConnectionName, Options.TopicName);
+            }
+        }
+
+        /// <summary>
+        /// Display all of the subscriptions in the connection, one per line.
+        /// </summary>
+        /// <param name="connectionName">The user-given friendly name of the connection.</param>
+        private async Task GetAll(string connectionName)
+        {
+            string connectionString = ConnectionString(connectionName);
+
+            ManagementClient manager = new ManagementClient(connectionString);
+            IList<TopicDescription> topics = await manager.GetTopicsAsync();
+            IList<Task<IList<SubscriptionDescription>>> subscriptionTasks = topics.Select(topic => manager.GetSubscriptionsAsync(topic.Path)).ToList();
+            List<SubscriptionDescription> subscriptions = new List<SubscriptionDescription>();
+
+            while (subscriptionTasks.Count > 0)
+            {
+                Task<IList<SubscriptionDescription>> subscriptionTask = await Task.WhenAny(subscriptionTasks);
+                subscriptionTasks.Remove(subscriptionTask);
+                subscriptions.AddRange(await subscriptionTask);
+            }
+
+            // Order the queues for consistency across calls. 
+            foreach (SubscriptionDescription subscription in subscriptions.OrderBy(s => s.TopicPath).ThenBy(s => s.SubscriptionName))
+            {
+                Console.WriteLine(SubscriptionPath(subscription.TopicPath, subscription.SubscriptionName));
+            }
+
+            await manager.CloseAsync();
         }
 
         /// <summary>
